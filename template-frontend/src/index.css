@@ -28,8 +28,12 @@ code {
 .float-right {
   float: right;
 }
-.inline-text {
+.display-inline {
   display: inline;
+}
+.margin-hor-10 {
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
 /* MSKCC Colors */
