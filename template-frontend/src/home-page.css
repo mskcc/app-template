@@ -1,0 +1,89 @@
+button {
+    border-radius: 15px;
+    border: 1px solid rgb(0, 0, 0, 0.25);
+    font-family: 'Montserrat', sans-serif;
+    display: block;
+    font-size: 0.9em;
+    margin: 25px auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    color:  #d5d4c7;
+    cursor: pointer;
+    background-color: rgb(0, 124, 186, 0.1);
+    transition-duration: 0.4s;
+}
+
+button:hover {
+    background-color: rgb(0, 124, 186, 0.6);
+    font-size: 0.95em;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+button:active {
+    background-color: rgb(0, 124, 186, 0.4);
+    transform: translateY(4px);
+    border: 0;
+}
+
+main {
+    display: flex;
+    width: 75%;
+    height: auto;
+    margin: auto;
+    background-image:linear-gradient( rgb(0, 124, 186, 0.3), rgb(182, 87, 184, 0.3));
+    border-radius: 15px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.1), 0 17px 50px 0 rgba(0,0,0,0.1);
+    transition-duration: 1s;
+}
+
+main:hover {
+    display: flex;
+    width: 75%;
+    height: auto;
+    margin: auto;
+    background-image:linear-gradient( rgb(0, 124, 186, 0.3), rgb(182, 87, 184, 0.3));
+    border-radius: 15px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.3), 0 17px 50px 0 rgba(0,0,0,0.3);
+}
+
+.quote-container, section {
+    width: 50%;
+    padding: 70px 50px;
+    /* border: 5px solid white; */
+}
+
+section {
+    text-align: center;
+    border-right: 0.1px solid rgb(0, 124, 186, 0.1);
+}
+
+p {
+    line-height: 1.7;
+}
+
+img {
+    width: 100px;
+    height: 50px;
+}
+
+#author {
+    font-size: 1.8em;
+    color: aliceblue;
+    transition-duration: 0.5s;
+}
+#author:hover {
+    color: rgb(255, 255, 255, 0.5);
+}
+
+#quote {
+    font-size: 1.2em;
+    color: rgb(255, 255, 255, 0.5);
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+}
+
+#quote:hover {
+    font-size: 1.22em;
+    line-height: 1.75;
+    color: aliceblue;
+}
