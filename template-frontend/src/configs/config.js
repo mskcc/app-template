@@ -1,3 +1,3 @@
-// QA
-export const LOGIN_SERVICE = '/login/api/auth';
-export const BACKEND = 'https://igodev.mskcc.org/app-template';
+// DEV
+export const LOGIN_SERVICE = 'https://igodev.mskcc.org/login/';
+export const BACKEND = 'http://localhost:4200';

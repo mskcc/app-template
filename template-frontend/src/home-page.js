@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {getQOD, getQuote} from './services/quote';
 import dna from './assets/dna.png';
+import './home-page.css';
+import logo from './assets/igo-icon.png';
 
 function HomePage() {
     const [quoteData, setQuoteData] = useState({
@@ -31,7 +33,12 @@ function HomePage() {
         getNextQuote(false);
     }, []);
 
-    return (<div>
+    return (<main id="flexOne">
+        <section>    
+            <img alt='dna' className='loading-icon inline-text' src={dna}/>
+            <p id="author" className={'em2 inline-text mskcc-dark-blue'}> {quoteData['author'] || ''}</p>
+            <p id="quote" className={'em4 italics mskcc-dark-blue'}>"{quoteData.quote || ''}"</p>
+        </section>
         <div className={'quote-container'}>
             <button type='button'
                     onClick={() => getNewQuote(false)}>
@@ -41,13 +48,9 @@ function HomePage() {
                     onClick={() => getNewQuote(true)}>
                 <p>Random</p>
             </button>
-            <p className={'em4 italics mskcc-dark-blue'}>"{quoteData.quote || ''}"</p>
-            <div className={'width-350 float-right'}>
-                <p className={'em2 inline-text mskcc-dark-blue'}>- {quoteData['author'] || ''}</p>
-                <img alt='dna' className='loading-icon inline-text' src={dna}/>
-            </div>
+            <img alt='igo-logo' className='logo-footer' src={logo}></img>
         </div>
-    </div>);
+    </main>);
 }
 
 export default HomePage;

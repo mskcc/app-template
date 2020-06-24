@@ -2,23 +2,13 @@ import React from 'react';
 import './App.css';
 import HomePage from './home-page';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import logo from './assets/igo-icon.png';
 
 function App() {
     return (<Router>
-        <header className='app-header background-mskcc-dark-blue'>
-            <p className={'mskcc-white em2'}>Something great coming...</p>
-        </header>
+        <blockquote class="imgur-embed-pub" lang="en" data-id="a/QWCcFQW"><a href="//imgur.com/a/QWCcFQW"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
         <div className={'background-mskcc-light-blue app-body'}>
-            <div className={'app-container'}>
-                <Switch>
-                    <Route path='/' component={HomePage}/>
-                </Switch>
-            </div>
+            <HomePage />
         </div>
-        <footer className='background-mskcc-dark-blue'>
-            <img alt='igo-logo' className='logo-footer' src={logo}></img>
-        </footer>
     </Router>);
 }
 
