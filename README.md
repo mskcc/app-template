@@ -20,7 +20,7 @@ Please use this as a template, but modify and engineer as you see fit. Pull requ
 ## QuickStart
 ### I) Frontend 
 ```
-$ cd ./template-frontend-react && npm install && npm run start # cd ./template-frontend-vue
+cd ./template-frontend-react && npm install && npm run start # cd ./template-frontend-vue
 ```
 ### II) Mongo
 ```
@@ -28,7 +28,7 @@ $ mongod
 ```
 ### III) Backend
 ```
-$ cd ./template-backend && npm install && npm run dev
+cd ./template-backend && npm install && npm run dev
 ```
 
 ## Please Read Before Deploying
