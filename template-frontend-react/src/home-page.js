@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { getQOD, getQuote } from './services/quote';
-import { makeStyles, Button, Paper, Typography } from '@material-ui/core';
-
-import dna from './assets/dna.png';
+import React, { useState } from 'react';
+import { getBarcode } from './services/barcode';
+import { makeStyles, Button, Paper } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -34,52 +32,77 @@ const useStyles = makeStyles((theme) => ({
 
 function HomePage() {
   const classes = useStyles();
+  const [plateType, setPlateType] = useState('');
+  const [numOfBarcodes, setNumOfBarcodes] = useState(0);
+  const [errorState, setErrorState] = useState('');
+  const [barcodeList, setBarcodeList] = useState([]);
 
-  const [quoteData, setQuoteData] = useState({
-    quote: 'Science and everyday life cannot and should not be separated.',
-    author: 'Rosalind Franklin',
-  });
-  const [nextQuote, setNextQuote] = useState({});
-
-  const getNewQuote = (isRandom) => {
-    if (isRandom) {
-      // Update w/ next quote, if data wasn't returned
-      setQuoteData(nextQuote || quoteData);
-      getNextQuote();
+  const validate = () => {
+    if (!numOfBarcodes || isNaN(numOfBarcodes)) {
+      setErrorState('Please enter a valid number');
+    } else if (numOfBarcodes < 1) {
+      setErrorState('Please enter a number greater than zero');
     } else {
-      getQOD().then((newQuoteData) => {
-        // Add new quote, or use old quote, if data wasn't returned
-        setQuoteData(newQuoteData || quoteData);
-      });
+      setErrorState('');
     }
-  };
-
-  async function getNextQuote() {
-    getQuote().then(setNextQuote);
   }
 
-  useEffect(() => {
-    // Get Quote of Day first
-    getNextQuote(false);
-  }, []);
+  const getPlateBarcode = async () => {
+    validate();
+    if (errorState === '') {
+      const barcodesResponse = await getBarcode(plateType, numOfBarcodes);
+      const { data } = barcodesResponse;
+      console.log(data);
+      setBarcodeList(data);
+    }
+  }
 
   return (
     <Paper className={classes.container}>
-      <div className={classes.quote}>
-        <Typography variant='h2'>"{quoteData.quote || ''}"</Typography>
-        <Typography variant='h5' align='right'>
-          – {quoteData['author'] || ''}
-          <img alt='dna' className={classes.loadingIcon} src={dna} />
-        </Typography>
-      </div>
-      <div className={classes.buttons}>
-        <Button id='newQuote' onClick={() => getNewQuote(false)} color='primary' variant='contained' type='submit'>
-          Quote of Day
-        </Button>
-        <Button id='randomQuote' onClick={() => getNewQuote(true)} color='secondary' variant='contained' type='submit'>
-          Random Quote
-        </Button>
-      </div>
+      <div className="dropdown">
+      <b>Choose Plate Type:</b>
+        <select id="plateTypes" onChange={(event) => setPlateType(event.target.value)}>
+        <option value=" "> ---Plate type--- </option>  
+        <option value="MSK_DNA">MSK_DNA</option>
+        <option value="MSK_RNA">MSK_RNA</option>
+        <option value="MSK_cDNA">MSK_cDNA</option>
+        <option value="MSK_LIB">MSK_LIB</option>
+        <option value="MSK_uLIB">MSK_uLIB</option>
+        <option value="CRISPR">CRISPR</option>
+        <option value="AA">AA</option>
+        <option value="MSK_CAP">MSK_CAP</option>
+        </select>
+        <p>Your selected plate type is: <b>{plateType}</b></p>
+        <p>Enter the number of barcodes:</p>   
+        <input type = "text" id = "count" size = "5" onChange={(event) => setNumOfBarcodes(event.target.value)}></input>
+        <p className='error'>{errorState}</p>
+    </div>
+    <div className={classes.Button}>
+      {/* <Button id='plateTypes' onClick={() => getPlateType()} color='primary' variant='contained' type='submit'>Submit Plate Type Selection</Button> */}
+      {/* <Button id='numOfBarcodes' color='secondary' variant='contained' type='submit'>Submit Count of Barcodes </Button> */}
+      <Button id='generate' onClick={() => getPlateBarcode()} color='primary' variant='contained'>Generate </Button>
+    </div>
+    {barcodeList && barcodeList.length > 0 ? (
+      <table className='barcodeTable'>
+      <thead>
+        <tr>
+          <th>Barcodes</th>
+        </tr>
+      </thead>
+      <tbody>
+        { barcodeList.map((barcode) => {
+          return (
+            <tr key={barcode} className={'barcodeTableRow'}>
+              <td className={'barcodeTableData'}>{barcode}</td>
+            </tr>
+          );
+        })
+        }
+        </tbody>
+    </table>
+    ) : null
+    }
+      
     </Paper>
   );
 }

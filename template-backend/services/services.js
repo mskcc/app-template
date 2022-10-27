@@ -1,24 +1,67 @@
-const QuoteModel = require('../models/QuoteModel');
-const { getNumQuotes } = require('../models/setup_deleteMe');
+const barcodModel = require('../models/BarcodeGenModel')
 const axios = require('axios');
+const { logger } = require('../helpers/winston');
 
+// async function findOne(type) {
+
+//   const client = await MongoClient.connect(url, { useNewUrlParser: true })
+//       .catch(err => { console.log(err); });
+//   if (!client) {
+//       return;
+//   }
+//   try {
+//       const db = client.db("plate-barcodes");
+//       let collection = db.collection('plateTypeLastIndex');
+//       let query = { plateType: type}
+//       const projection = { _id: 0, plateType: 0, counter: 1 };
+//       const res = collection.find(query).project(projection);
+//       await res.forEach(console.dir);
+//   } catch (err) {
+//       console.log(err);
+//   } finally {
+//       client.close();
+//   }
+// }
 /**
- * Returns a random quote in the database
+ * Returns unique barcodes 
  * @returns {Promise<*>}
  */
-exports.getRandomQuote = async function () {
-  const id = Math.floor(Math.random() * getNumQuotes());
-  const quote = await QuoteModel.findOne({ id });
-
-  if (quote == null) return;
-
-  // Redact data
-  const quoteJson = quote.toJSON();
-  delete quoteJson._id;
-  delete quoteJson.id;
-  delete quoteJson.__v;
-
-  return quoteJson;
+exports.generateUniqueBarcode = async function (plateType, NumberOfBarcodes) {
+  var listOfBarcodes = [];
+  console.log('plate type is: ' + plateType);
+  var year = new Date().getFullYear().toString().substring(2, 5);
+  console.log('Year is: ' + year);
+  let counter;
+  console.log('NumberOfBarcodes = ' + NumberOfBarcodes);
+  const query = { "plateType": plateType};
+  const projection = { _id: 0, plateType: 1, counter: 1 };
+  const result = await barcodModel.findOne({plateType: plateType});
+  if (result == null) return;
+  console.log('After find.. Counter = ' + result.counter);
+  counter = result.counter;
+  let padded = false;
+  let prevCountOfTraillingZeros = 0;
+  for (let i = 0; i < NumberOfBarcodes; i++) {
+    // MSK_DNA_2200001
+    console.log('in for loop counter = ' + counter);
+    newCounter = parseInt(counter) + 1;
+    counter = newCounter;
+    console.log('newCounter = ' + newCounter);
+    let countOfTraillingZeros = 5 - String(newCounter).length;
+    console.log('number or trailing zeros = ' + countOfTraillingZeros);
+    if (!padded && countOfTraillingZeros != prevCountOfTraillingZeros) {
+      year = year.padEnd(String(year).length + countOfTraillingZeros, '0');
+      prevCountOfTraillingZeros = countOfTraillingZeros;
+      padded = true;
+      console.log('year after padding to the end: ' + String(year))
+    }
+    let uniquePlateBarcode = String(plateType) + "_" + String(year) + newCounter;
+    listOfBarcodes.push(uniquePlateBarcode);
+    console.log('pushed ' + uniquePlateBarcode);
+    barcodModel.findOneAndUpdate({plateType: plateType},{$set: { counter: newCounter }});
+    console.log('Updated the last index by one')  
+  }
+  return listOfBarcodes;
 };
 
 exports.getCatFact = async function () {
